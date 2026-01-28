@@ -6,16 +6,17 @@ class Engine(Part):
         super().__init__(filePath, lines)
         self.engineStats = ["", ""]
         self.getEngineStats()
-        
+        self.getFuelResources()
+
     def printSingleEngineStats(self):
         print("Max Thrust: ", end="\t")
         print(self.engineStats[0])
         print("Vac Isp: ", end="\t")
         print(self.engineStats[1])
-    
+
     def printMultiEngineStats(self):
         num = 1
-        index = 0        
+        index = 0
         while num < len(self.engineStats) - 1:
             print("Max Thrust " + str(num) + ": ", end="\t")
             print(self.engineStats[index])
@@ -24,12 +25,12 @@ class Engine(Part):
             print(self.engineStats[index])
             index += 1
             num += 1
-        
+
     def printSpecs(self):
         super().printSpecs()
         self.printSingleEngineStats() if len(self.engineStats) == 2 else self.printMultiEngineStats()
 
-    def getIspCurve(self, lineNumber):
+    def getIspCurveLines(self, lineNumber):
         ispLineNumbers = CfgReader.locateTextBlock(self.lines, lineNumber, "atmosphereCurve", "}")
         return self.lines[ispLineNumbers[0]:ispLineNumbers[1]]
 
@@ -42,22 +43,30 @@ class Engine(Part):
         return ispCurveKeys
 
     def getVacIsp(self, lineNumber):
-        ispCurve = self.getIspCurve(lineNumber)        
-        ispCurveKeys = self.getIspCurveKeys(ispCurve)        
+        ispCurveLines = self.getIspCurveLines(lineNumber)
+        ispCurveKeys = self.getIspCurveKeys(ispCurveLines)
         for line in ispCurveKeys:
             if line.startswith("0"):
                 return line.split(" ")[1]
         return -1
-    
+
     def getEngineStats(self):
         engineStats = []
         lineNumber = CfgReader.locateTextLine(self.lines, 0, "maxThrust")
-        nextLine = lineNumber        
+        nextLine = lineNumber
         while not nextLine == -1:
-            thrustValue = CfgReader.getValuesFromLineNumber(self.lines, lineNumber)            
+            thrustValue = CfgReader.getValuesFromLineNumber(self.lines, lineNumber)
             engineStats.append(thrustValue)
-            vacIsp = self.getVacIsp(lineNumber)            
+            vacIsp = self.getVacIsp(lineNumber)
             engineStats.append(vacIsp)
             nextLine = CfgReader.locateTextLine(self.lines, lineNumber, "maxThrust")
             lineNumber = nextLine
         self.engineStats = engineStats
+
+    def getFuelResourceLines(self, lineNumber):
+        fuelResourceLineNumbers = CfgReader.locateTextBlock(self.lines, lineNumber, "RESOURCE", "}")
+        return self.lines[fuelResourceLineNumbers[0]:fuelResourceLineNumbers[1]]
+
+    def getFuelResources(self):
+        pass
+##        print(self.getFuelResourceLines(0))

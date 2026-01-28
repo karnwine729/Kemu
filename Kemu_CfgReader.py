@@ -5,19 +5,19 @@ class CfgReader:
     #gamedataPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\GameData"
     gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
     #gamedataPath = "/home/keith/kspTestingTmp/GameData"
-    
+
     #localizationPath = Path(fullPath) / Path("Localization/en-us.cfg")
     localizationPath = Path(gamedataPath) / Path("Squad/Localization/dictionary.cfg")
     #localizationPath = Path(gamedataPath) / Path("SquadExpansion/Serenity/Localization/dictionary.cfg")
-    
-    def __init__(self, directoryName):        
+
+    def __init__(self, directoryName):
         self.directoryName = directoryName
         self.fullPath = Path(CfgReader.gamedataPath) / Path(directoryName)
-        
+
     def validatePaths(self):
         if not self.fullPath.exists():
             print("File path does not exist.")
-            sys.exit()        
+            sys.exit()
         if not self.localizationPath.exists():
             print("Could not find localization file.")
             sys.exit()
@@ -31,9 +31,9 @@ class CfgReader:
                     cfgFiles.append(os.path.join(root,file))
         if not cfgFiles:
             print("No .cfg files found in directory.")
-            sys.exit() 
+            sys.exit()
         return cfgFiles
-    
+
     @staticmethod
     def getLines(file):
         lines = []
@@ -41,7 +41,7 @@ class CfgReader:
             for line in currentFile.readlines():
                 lines.append(line.strip())
         return lines
-    
+
     def getPartCfgFiles(self):
         partCfgFiles = []
         cfgFiles = self.getCfgFiles()
@@ -52,7 +52,7 @@ class CfgReader:
             if CfgReader.isDeprecated(lines):
                 continue
             partCfgFiles.append(file)
-        return partCfgFiles    
+        return partCfgFiles
 
     @staticmethod
     def locateTextLine(lines, startingLine, searchTerm):
@@ -85,9 +85,9 @@ class CfgReader:
                 line = line.split("=")[1]
                 return line.split("//")[0].strip()
         return "LOCALIZATION DATA NOT FOUND"
-    
+
     ### PART CHECKS ###
-    
+
     @staticmethod
     def partCheck(lines, searchTerm):
         for line in lines:
@@ -95,7 +95,7 @@ class CfgReader:
             if searchTerm in line:
                 return True
         return False
-    
+
     @staticmethod
     def isPart(lines):
         return CfgReader.partCheck(lines, "module=Part")
@@ -103,17 +103,17 @@ class CfgReader:
     @staticmethod
     def isDeprecated(lines):
         return CfgReader.partCheck(lines, "TechHidden=True")
-    
+
     @staticmethod
     def isEngine(lines):
         return CfgReader.partCheck(lines, "category=Engine")
-    
+
     @staticmethod
     def isTank(lines):
         return CfgReader.partCheck(lines, "category=Tank")
-    
+
     ### GET VALUES ###
-    
+
     @staticmethod
     def getValuesFromSearchTerm(lines, searchTerm):
         for line in lines:
@@ -125,7 +125,7 @@ class CfgReader:
                     return line[0]
                 return line
         return searchTerm.upper() + " NOT FOUND"
-    
+
     @staticmethod
     def getValuesFromLineNumber(lines, lineNumber):
         line = lines[lineNumber - 1].split("=")[1]
