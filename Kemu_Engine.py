@@ -4,7 +4,9 @@ from Kemu_Part import Part
 class Engine(Part):
     def __init__(self, filePath, lines):
         super().__init__(filePath, lines)
+        self.gimbal = ""
         self.engineStats = ["", ""]
+        self.getGimbal()
         self.getEngineStats()        
 
     def __str__(self):
@@ -30,6 +32,8 @@ class Engine(Part):
 
     def printSpecs(self):
         super().printSpecs()
+        print("Gimbal Range: ", end="\t")
+        print(self.gimbal)
         self.printSingleEngineStats() if len(self.engineStats) == 2 else self.printMultiEngineStats()
 
     def getIspCurveLines(self, lineNumber):
@@ -52,13 +56,16 @@ class Engine(Part):
                 return line.split(" ")[1]
         return -1
 
+    def getGimbal(self):
+        self.gimbal = CfgReader.getValuesFromSearchTerm(self.lines, "gimbalRange")
+
     def getEngineStats(self):
         engineStats = []
         lineNumber = CfgReader.locateTextLine(self.lines, 0, "maxThrust")
         nextLine = lineNumber
         while not nextLine == -1:
-            thrustValue = CfgReader.getValuesFromLineNumber(self.lines, lineNumber)
-            engineStats.append(thrustValue)
+            maxThrust = CfgReader.getValuesFromLineNumber(self.lines, lineNumber)
+            engineStats.append(maxThrust)
             vacIsp = self.getVacIsp(lineNumber)
             engineStats.append(vacIsp)
             nextLine = CfgReader.locateTextLine(self.lines, lineNumber, "maxThrust")

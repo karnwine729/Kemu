@@ -24,10 +24,6 @@ def printParts(parts):
 
 cr = CfgReader(directoryName)
 partFiles = cr.getPartCfgFiles()
-##partFile = partFiles[149]
-##partData = cr.getLines(partFile)
-##part = Engine(partFile, partData)
-##part.printSpecs()
 parts = getParts(partFiles)
 parts[0].printSpecs()
 
