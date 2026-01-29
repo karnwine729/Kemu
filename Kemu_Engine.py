@@ -5,8 +5,10 @@ class Engine(Part):
     def __init__(self, filePath, lines):
         super().__init__(filePath, lines)
         self.engineStats = ["", ""]
-        self.getEngineStats()
-        self.getFuelResources()
+        self.getEngineStats()        
+
+    def __str__(self):
+        return f"Engine: {self.title}"
 
     def printSingleEngineStats(self):
         print("Max Thrust: ", end="\t")
@@ -62,11 +64,3 @@ class Engine(Part):
             nextLine = CfgReader.locateTextLine(self.lines, lineNumber, "maxThrust")
             lineNumber = nextLine
         self.engineStats = engineStats
-
-    def getFuelResourceLines(self, lineNumber):
-        fuelResourceLineNumbers = CfgReader.locateTextBlock(self.lines, lineNumber, "RESOURCE", "}")
-        return self.lines[fuelResourceLineNumbers[0]:fuelResourceLineNumbers[1]]
-
-    def getFuelResources(self):
-        pass
-##        print(self.getFuelResourceLines(0))

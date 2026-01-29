@@ -66,7 +66,7 @@ class CfgReader:
         searchTermFound = False
         nextStartingLine = 0
         endingLine = 0
-        for lineNumber, lineText in enumerate(lines[startingLine:], startingLine):
+        for lineNumber, lineText in enumerate(lines[startingLine:], startingLine):            
             if startingSearchTerm in lineText:
                 nextStartingLine = lineNumber + 1
                 searchTermFound = True

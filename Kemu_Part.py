@@ -11,8 +11,10 @@ class Part:
         self.tech = ""
         self.getPartData(self.lines)
 
-    def printSpecs(self):
-        print()
+    def __str__(self):
+        return f"Part: {self.title}"
+
+    def printSpecs(self):        
         print(self.filePath)
         print("Title: ", end="\t\t")
         print(self.title)
