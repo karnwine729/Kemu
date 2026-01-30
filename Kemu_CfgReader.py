@@ -49,7 +49,7 @@ class CfgReader:
             lines = CfgReader.getLines(file)
             if not CfgReader.isPart(lines):
                 continue
-            if CfgReader.isDeprecated(lines):
+            if CfgReader.isHidden(lines):
                 continue
             partCfgFiles.append(file)
         return partCfgFiles
@@ -102,8 +102,10 @@ class CfgReader:
 
     @staticmethod
     def partCheck(lines, searchTerm):
+        searchTerm = searchTerm.lower()
         for line in lines:
             line = "".join(line.split())
+            line = line.lower()
             if searchTerm in line:
                 return True
         return False
@@ -113,8 +115,8 @@ class CfgReader:
         return CfgReader.partCheck(lines, "module=Part")
 
     @staticmethod
-    def isDeprecated(lines):
-        return CfgReader.partCheck(lines, "TechHidden=True")
+    def isHidden(lines):
+        return CfgReader.partCheck(lines, "TechHidden=True") or CfgReader.partCheck(lines, "TechRequired=Unresearcheable")
 
     @staticmethod
     def isJetEngine(lines):
@@ -122,7 +124,7 @@ class CfgReader:
 
     @staticmethod
     def isEngine(lines):
-        return CfgReader.partCheck(lines, "category=Engine") and not CfgReader.isJetEngine(lines)
+        return CfgReader.partCheck(lines, "category=Engine")
 
     @staticmethod
     def isTank(lines):

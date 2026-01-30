@@ -16,6 +16,8 @@ def getParts(partFiles):
         partData = cr.getLines(file)
         if CfgReader.isEngine(partData):
             parts.append(Engine(file, partData))
+            continue
+        parts.append(Part(file, partData))
     return parts
 
 def printPartTitles(parts):
@@ -32,6 +34,5 @@ def printFullPartSpecs(parts, startingPartNum, endingPartNum):
 
 cr = CfgReader(directoryName)
 partFiles = cr.getPartCfgFiles()
-engines = getParts(partFiles)
-##printPartTitles(engines)
-printFullPartSpecs(engines, 0, 27)
+parts = getParts(partFiles)
+parts[143].printSpecs()
