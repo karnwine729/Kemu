@@ -3,8 +3,8 @@ from pathlib import Path
 
 class CfgReader:
     #gamedataPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\GameData"
-    gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
-    #gamedataPath = "/home/keith/kspTestingTmp/GameData"
+    #gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
+    gamedataPath = "/home/keith/kspTestingTmp/GameData"
 
     #localizationPath = Path(fullPath) / Path("Localization/en-us.cfg")
     localizationPath = Path(gamedataPath) / Path("Squad/Localization/dictionary.cfg")
@@ -106,7 +106,7 @@ class CfgReader:
 
     @staticmethod
     def isEngine(lines):
-        return CfgReader.partCheck(lines, "category=Engine")
+        return CfgReader.partCheck(lines, "category=Engine") and not CfgReader.partCheck(lines, "velCurve")
 
     @staticmethod
     def isTank(lines):
@@ -134,3 +134,4 @@ class CfgReader:
         if len(line) == 1:
             return line[0]
         return line
+

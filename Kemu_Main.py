@@ -6,8 +6,8 @@ from Kemu_Engine import Engine
 
 #directoryName = "FarFutureTechnologies"
 #directoryName = "NearFutureAeronautics"
-#directoryName = "Squad/Parts"
-directoryName = "SquadExpansion/MakingHistory/Parts"
+directoryName = "Squad/Parts"
+#directoryName = "SquadExpansion/MakingHistory/Parts"
 #directoryName = "SquadExpansion/Serenity/Parts"
 
 def getParts(partFiles):
@@ -18,13 +18,22 @@ def getParts(partFiles):
             parts.append(Engine(file, partData))
     return parts
 
-def printParts(parts):
+def printPartTitles(parts):
+    i = 0
     for part in parts:
-        print(part)        
+        print("[" + str(i) + "]", end=" ")
+        print(part)
+        i += 1
+        
+def printFullPartSpecs(parts, startingPartNum, endingPartNum):
+    for x in range(startingPartNum, endingPartNum + 1):
+        parts[x].printSpecs()
+        print()
 
 cr = CfgReader(directoryName)
 partFiles = cr.getPartCfgFiles()
-parts = getParts(partFiles)
-parts[0].printSpecs()
+engines = getParts(partFiles)
+printPartTitles(engines)
+
 
 

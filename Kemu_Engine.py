@@ -7,7 +7,8 @@ class Engine(Part):
         self.gimbal = ""
         self.engineStats = ["", ""]
         self.getGimbal()
-        self.getEngineStats()        
+        self.getEngineStats()
+        
 
     def __str__(self):
         return f"Engine: {self.title}"
@@ -34,7 +35,10 @@ class Engine(Part):
         super().printSpecs()
         print("Gimbal Range: ", end="\t")
         print(self.gimbal)
-        self.printSingleEngineStats() if len(self.engineStats) == 2 else self.printMultiEngineStats()
+        if len(self.engineStats) == 2:
+            self.printSingleEngineStats()
+        else:
+            self.printMultiEngineStats()        
 
     def getIspCurveLines(self, lineNumber):
         ispLineNumbers = CfgReader.locateTextBlock(self.lines, lineNumber, "atmosphereCurve", "}")
@@ -57,7 +61,10 @@ class Engine(Part):
         return -1
 
     def getGimbal(self):
-        self.gimbal = CfgReader.getValuesFromSearchTerm(self.lines, "gimbalRange")
+        gimbal = CfgReader.getValuesFromSearchTerm(self.lines, "gimbalRange")
+        if gimbal == "GIMBALRANGE NOT FOUND":
+            gimbal = 0
+        self.gimbal = gimbal
 
     def getEngineStats(self):
         engineStats = []
@@ -71,3 +78,4 @@ class Engine(Part):
             nextLine = CfgReader.locateTextLine(self.lines, lineNumber, "maxThrust")
             lineNumber = nextLine
         self.engineStats = engineStats
+
