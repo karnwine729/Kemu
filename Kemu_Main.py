@@ -24,7 +24,7 @@ def printPartTitles(parts):
         print("[" + str(i) + "]", end=" ")
         print(part)
         i += 1
-        
+
 def printFullPartSpecs(parts, startingPartNum, endingPartNum):
     for x in range(startingPartNum, endingPartNum + 1):
         parts[x].printSpecs()
@@ -33,7 +33,5 @@ def printFullPartSpecs(parts, startingPartNum, endingPartNum):
 cr = CfgReader(directoryName)
 partFiles = cr.getPartCfgFiles()
 engines = getParts(partFiles)
-printPartTitles(engines)
-
-
-
+##printPartTitles(engines)
+printFullPartSpecs(engines, 0, 27)

@@ -9,12 +9,14 @@ class Part:
         self.cost = ""
         self.size = ""
         self.tech = ""
+        self.resources = None
+        self.getResources()
         self.getPartData(self.lines)
 
     def __str__(self):
         return f"Part: {self.title}"
 
-    def printSpecs(self):        
+    def printSpecs(self):
         print(self.filePath)
         print("Title: ", end="\t\t")
         print(self.title)
@@ -26,6 +28,8 @@ class Part:
         print(self.size)
         print("Tech: ", end="\t\t")
         print(self.tech)
+        if not self.resources == None:
+            self.printResources()
 
     @staticmethod
     def convertBulkheadProfile(bulkheadProfile):
@@ -81,3 +85,23 @@ class Part:
         self.getCost()
         self.getSize()
         self.getTech()
+
+    def getResourceLineNumbers(self):
+        return CfgReader.locateTextBlockLoop(self.lines, 0, "RESOURCE", "}")
+
+    def getResources(self):
+        resources = []
+        resourceLineNumbers = self.getResourceLineNumbers()
+        for numbers in resourceLineNumbers:
+            name = CfgReader.getValuesFromTextBlock(self.lines, "name", numbers[0], numbers[1])
+            amount = CfgReader.getValuesFromTextBlock(self.lines, "amount", numbers[0], numbers[1])
+            if amount == "AMOUNT NOT FOUND":
+                continue
+            resources.append(name)
+            resources.append(amount)
+        self.resources = resources
+
+    def printResources(self):
+        for x in range(0, len(self.resources), 2):
+            print(self.resources[x] + ":",end="\t")
+            print(self.resources[x+1])

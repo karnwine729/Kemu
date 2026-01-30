@@ -3,8 +3,8 @@ from pathlib import Path
 
 class CfgReader:
     #gamedataPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Kerbal Space Program\\GameData"
-    #gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
-    gamedataPath = "/home/keith/kspTestingTmp/GameData"
+    gamedataPath = "C:\\Keith Testing\\common\\Kerbal Space Program\\GameData"
+    #gamedataPath = "/home/keith/kspTestingTmp/GameData"
 
     #localizationPath = Path(fullPath) / Path("Localization/en-us.cfg")
     localizationPath = Path(gamedataPath) / Path("Squad/Localization/dictionary.cfg")
@@ -66,7 +66,7 @@ class CfgReader:
         searchTermFound = False
         nextStartingLine = 0
         endingLine = 0
-        for lineNumber, lineText in enumerate(lines[startingLine:], startingLine):            
+        for lineNumber, lineText in enumerate(lines[startingLine:], startingLine):
             if startingSearchTerm in lineText:
                 nextStartingLine = lineNumber + 1
                 searchTermFound = True
@@ -76,6 +76,18 @@ class CfgReader:
                     endingLine = lineNumber + 1
                     break
         return [nextStartingLine, endingLine]
+
+    @staticmethod
+    def locateTextBlockLoop(lines, startingLine, startingSearchTerm, endingSearchTerm):
+        nextStartingLine = startingLine
+        lineNumbers = []
+        while nextStartingLine < len(lines):
+            numbers = CfgReader.locateTextBlock(lines, nextStartingLine, startingSearchTerm, endingSearchTerm)
+            if numbers == [0,0]:
+                break
+            lineNumbers.append(numbers)
+            nextStartingLine = numbers[1]
+        return lineNumbers
 
     @staticmethod
     def lookupLocalization(localizationText):
@@ -105,8 +117,12 @@ class CfgReader:
         return CfgReader.partCheck(lines, "TechHidden=True")
 
     @staticmethod
+    def isJetEngine(lines):
+        return CfgReader.partCheck(lines, "velCurve")
+
+    @staticmethod
     def isEngine(lines):
-        return CfgReader.partCheck(lines, "category=Engine") and not CfgReader.partCheck(lines, "velCurve")
+        return CfgReader.partCheck(lines, "category=Engine") and not CfgReader.isJetEngine(lines)
 
     @staticmethod
     def isTank(lines):
@@ -135,3 +151,11 @@ class CfgReader:
             return line[0]
         return line
 
+    @staticmethod
+    def getValuesFromTextBlock(lines, searchTerm, startingLine, endingLine):
+        for x in range(startingLine, endingLine):
+            if searchTerm in lines[x]:
+                line = lines[x].split("=")[1]
+                line = line.split("//")[0].strip()
+                return line
+        return searchTerm.upper() + " NOT FOUND"

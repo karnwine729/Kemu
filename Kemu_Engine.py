@@ -5,10 +5,10 @@ class Engine(Part):
     def __init__(self, filePath, lines):
         super().__init__(filePath, lines)
         self.gimbal = ""
-        self.engineStats = ["", ""]
+        self.engineStats = None
         self.getGimbal()
         self.getEngineStats()
-        
+
 
     def __str__(self):
         return f"Engine: {self.title}"
@@ -38,7 +38,7 @@ class Engine(Part):
         if len(self.engineStats) == 2:
             self.printSingleEngineStats()
         else:
-            self.printMultiEngineStats()        
+            self.printMultiEngineStats()
 
     def getIspCurveLines(self, lineNumber):
         ispLineNumbers = CfgReader.locateTextBlock(self.lines, lineNumber, "atmosphereCurve", "}")
@@ -78,4 +78,3 @@ class Engine(Part):
             nextLine = CfgReader.locateTextLine(self.lines, lineNumber, "maxThrust")
             lineNumber = nextLine
         self.engineStats = engineStats
-
