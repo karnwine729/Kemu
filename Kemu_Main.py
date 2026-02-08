@@ -1,13 +1,10 @@
 from Kemu_CfgReader import CfgReader
-from Kemu_CfgWriter import CfgWriter
 from Kemu_CsvWriter import CsvWriter
 from Kemu_CsvReader import CsvReader
 from Kemu_Part import Part
 from Kemu_Engine import Engine
 from Kemu_FuelTank import FuelTank
-
-techTierData = CsvReader.getTechTreeTierData()
-
+from Kemu_TechTreeModding import TechTreeModding
 
 def getParts(partCfgFilepaths):
     parts = []
@@ -22,31 +19,25 @@ def getParts(partCfgFilepaths):
         parts.append(Part(filepath, partCfgFileLines))
     return parts
 
+def createTechTreeCsv(directoryName):
+    partFilepaths = CfgReader.getPartCfgFilepaths(directoryName)
+    cttPatchFilepath = CfgReader.getCommunityTechTreePatchFilepath(directoryName)
+    parts = getParts(partFilepaths)
+    TechTreeModding.updatePartsForCommunityTechTree(parts, cttPatchFilepath)
+    TechTreeModding.createCsvForTechTreePatches(parts)
+    print(f"Created {directoryName} CSV for Tech Tree Patches")
 
-def updatePartsForCommunityTechTree(parts, communityTechTreeCfgFilepath):
-    for part in parts:
-        part.updateForCommunityTechTree(communityTechTreeCfgFilepath)
+createTechTreeCsv("NearFutureAeronautics")
 
-
-nfaPartFilepaths = CfgReader.getPartCfgFilepaths("NearFutureAeronautics")
-nfaCttPatchFilepath = CfgReader.getCommunityTechTreePatchFilepath(
-    "NearFutureAeronautics"
-)
-nfaParts = getParts(nfaPartFilepaths)
-updatePartsForCommunityTechTree(nfaParts, nfaCttPatchFilepath)
-CsvWriter.createDataDumpCsv(nfaParts)
-# CsvWriter.createCsvForTechTreePatches(nfaParts, techTierData)
-CfgWriter.createTechTreePatch(nfaParts, techTierData)
+# CfgWriter.createTechTreePatch(nfaParts, techTierData)
 
 
-fftPartFilepaths = CfgReader.getPartCfgFilepaths("FarFutureTechnologies")
-fftCttPatchFilepath = CfgReader.getCommunityTechTreePatchFilepath(
-    "FarFutureTechnologies"
-)
-fftParts = getParts(fftPartFilepaths)
-updatePartsForCommunityTechTree(fftParts, fftCttPatchFilepath)
-# CsvWriter.createCsvForTechTreePatches(fftParts, techTierData)
-CfgWriter.createTechTreePatch(fftParts, techTierData)
+# fftPartFilepaths = CfgReader.getPartCfgFilepaths("FarFutureTechnologies")
+# fftCttPatchFilepath = CfgReader.getCommunityTechTreePatchFilepath("FarFutureTechnologies")
+# fftParts = getParts(fftPartFilepaths)
+# updatePartsForCommunityTechTree(fftParts, fftCttPatchFilepath)
+# # CsvWriter.createCsvForTechTreePatches(fftParts, techTierData)
+# CfgWriter.createTechTreePatch(fftParts, techTierData)
 
 # stockPartFilepaths = CfgReader.getPartCfgFilepaths("Squad/Parts")
 # stockParts = getParts(stockPartFilepaths)

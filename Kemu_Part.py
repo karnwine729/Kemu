@@ -92,6 +92,12 @@ class Part:
                 self.tech = line
                 break
 
+    def updateTech(self, newTechData):
+        for tech in newTechData:
+            if tech[0] == self.name:
+                self.tech = tech[1]
+                break
+
     def getPartData(self):
         self.getTitle()
         self.getMod()

@@ -20,6 +20,7 @@ class CsvWriter:
             csvEntries.append([part.filePath, part.title, part.category, part.name, part.cost, part.size, part.tech])
         CsvWriter.createCsv(csvFileName, columnNames, csvEntries)
 
+
     @staticmethod
     def createCsvForTechTreePatches(parts, techTierData):
         modName = parts[0].mod

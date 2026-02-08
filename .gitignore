@@ -1,0 +1,6 @@
+venv
+__pycache__
+*.cfg
+ForTechTreePatches*.csv
+TechTreePatch*.csv
+PartDataDump*.csv
