@@ -3,7 +3,7 @@ import csv, sys
 from pathlib import Path
 
 from CttData import CttData
-from PartParsing import PartParsing
+# from PartParsing import PartParsing
 from Filepaths import Filepaths
 
 def getLines(filepath):
@@ -13,9 +13,9 @@ def getLines(filepath):
             for line in currentFile.readlines():
                 lines.append(line)
     except FileNotFoundError:
-        print(f"\033[93m[{filepath}] not found.\033[0m")
+        print(f"\033[93mgetLines(): [{filepath}] not found.\033[0m")
     except UnicodeDecodeError:
-        print(f"\033[93mInvalid file format.\033[0m")
+        print(f"\033[93mgetLines(): Invalid file format.\033[0m")
     return lines
 
 def createCsv(filename, columnNames, rows):
@@ -53,13 +53,7 @@ cttPatchData = CttData(cttPatchLines)
 cfgFilepaths = filepaths.cfgFilepaths
 partCfgFilepaths = filepaths.partCfgFilepaths
 print(partCfgFilepaths[150])
-part150Dict = PartParsing.getPartDict(getLines(partCfgFilepaths[150]))
 
-def printPartDict(partDict):
-    for key, value in partDict.items():
-        print(f"{key}: {value}")
-
-printPartDict(part150Dict)
 
 
 
