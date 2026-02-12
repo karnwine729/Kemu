@@ -1,41 +1,20 @@
 ## Austin's code that I need to understand and change for Kemu
 
-SENTINEL = "This can just be any string that you know you aren't ever gonna see ever... like ever ever"
+import sys
 
 def get_cfg(lines):
-    cfg, _ = _get_cfg_internal(lines,0)
-    return cfg
+    lg = (l for l in lines)
+    return get_cfg_rec(lg)
 
-def _get_cfg_internal(lines, i):
+def get_cfg_rec(lines):
     cfg = {}
 
     last_non_empty = ""
-    while i < len(lines):
-        line = lines[i]
-
+    for line in lines:
         if '{' in line:
-            foo, i = _get_cfg_internal(lines, i + 1)
+            nest = get_cfg_rec(lines)
             key = get_module_key(last_non_empty, cfg)
-            cfg[key] = foo
-        elif '}' in line:
-            break
-        elif '=' in line:
-            key, val = parse_line(line)
-            cfg[key] = val
-        elif line:
-            last_non_empty = line
-        i += 1
-
-    return cfg, i
-
-def get_cfg_gen(lines):
-    cfg = {}
-
-    last_non_empty = ""
-    while (line := next(lines)):
-        if '{' in line:
-            nest = get_cfg_gen(lines)
-            cfg[last_non_empty] = nest
+            cfg[key] = nest
         elif '}' in line:
             break
         elif line.startswith('//'):
@@ -43,8 +22,6 @@ def get_cfg_gen(lines):
         elif '=' in line:
             key, val = parse_line(line)
             cfg[key] = val
-        elif line == SENTINEL:
-            break
         else:
             last_non_empty = line
 
@@ -73,8 +50,6 @@ if __name__ == '__main__':
     lines = []
     with open(filename) as fin:
         lines = [l.strip() for l in fin.readlines()]
-        lines.append(SENTINEL)
-        lg = (l for l in lines if l)
 
     cfg = get_cfg(lines)
 
