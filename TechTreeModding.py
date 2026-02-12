@@ -1,14 +1,29 @@
-import csv
+import io
 
 class TechTreeModding:
 
-    @staticmethod
-    def getCsvData(filepath):
-        csvData = []
-        with open(filepath) as csvFile:
-            reader = csv.reader(csvFile)
-            for row in reader:
-                csvData.append(row)
-        return csvData
+    def __init__(self, techTierData):
+        self.techTierData = techTierData
 
-    techTierData = getCsvData("kttTechTiers.csv")
+    @classmethod
+    def lookupTechTreeTier(cls, techNode):
+        for row in cls.techTierData:
+            if row[0] == techNode:
+                return row[1]
+        return "TECH NODE NOT FOUND"
+
+    @classmethod
+    def generateTechTreeCsvData(cls, parts):
+        pass
+
+    @classmethod
+    def createTechTreePatch(cls, parts):
+        pass
+        # modName = parts[0].mod
+        # with io.open(f"TechTreePatch_{modName}.cfg", 'w', encoding="UTF-8") as file:
+        #     for part in parts:
+        #         techTier = cls.lookupTechTreeTier(part.tech)
+        #         file.write(f"@PART[{part.name}]:FINAL // {part.title}\n")
+        #         file.write("{\n")
+        #         file.write(f"\t@techRequired = {part.tech} // Tier {techTier}\n")
+        #         file.write("}\n")

@@ -1,6 +1,6 @@
-venv
-__pycache__
+venv/
+__pycache__/
 *.cfg
-ForTechTreePatches*.csv
-TechTreePatch*.csv
-PartDataDump*.csv
+*.pptx
+*.csv
+!kttTechTiers.csv
