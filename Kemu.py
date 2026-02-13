@@ -1,9 +1,7 @@
-from fileinput import filename
 import csv, sys
 from pathlib import Path
 
 from CttData import CttData
-# from PartParsing import PartParsing
 from Filepaths import Filepaths
 
 def getLines(filepath):
@@ -11,7 +9,7 @@ def getLines(filepath):
     try:
         with open(filepath, "r", encoding="UTF-8") as currentFile:
             for line in currentFile.readlines():
-                lines.append(line)
+                lines.append(line.strip())
     except FileNotFoundError:
         print(f"\033[93mgetLines(): [{filepath}] not found.\033[0m")
     except UnicodeDecodeError:
@@ -45,17 +43,14 @@ directoryName = "Squad/Parts"
 # directoryName = "SquadExpansion/MakingHistory/Parts"
 # directoryName = "SquadExpansion/Serenity/Parts"
 
-techTierData = getCsvData("kttTechTiers.csv")
+# techTierData = getCsvData("kttTechTiers.csv")
 
-filepaths = Filepaths(gamedataPath, directoryName)
-cttPatchLines = getLines(filepaths.cttPatchFilepath)
-cttPatchData = CttData(cttPatchLines)
-cfgFilepaths = filepaths.cfgFilepaths
-partCfgFilepaths = filepaths.partCfgFilepaths
-print(partCfgFilepaths[150])
-
-
-
+# filepaths = Filepaths(gamedataPath, directoryName)
+# cttPatchLines = getLines(filepaths.cttPatchFilepath)
+# cttPatchData = CttData(cttPatchLines)
+# cfgFilepaths = filepaths.cfgFilepaths
+# partCfgFilepaths = filepaths.partCfgFilepaths
+# print(partCfgFilepaths[150])
 
 
 
