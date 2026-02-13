@@ -1,6 +1,7 @@
 venv/
 __pycache__/
 *.cfg
+!testPart.cfg
 *.pptx
 *.csv
 !kttTechTiers.csv
