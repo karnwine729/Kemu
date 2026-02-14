@@ -40,3 +40,6 @@ import Kemu
 
 testFile = "testPart.cfg"
 partDict = getPartDict(Kemu.getLines(testFile))
+for key, value in partDict.items():
+    for subKey, subValue in value.items():
+        print(f"{subKey}: {subValue}")

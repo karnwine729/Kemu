@@ -1,6 +1,6 @@
 ### Kemu
 
-Utility for Kerbal Space Program part modding
+Utility for reading and generating KSP .cfg files.
 
 #### Features to be implemented :
 
