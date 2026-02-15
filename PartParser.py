@@ -42,4 +42,6 @@ import Kemu
 
 testFile = "testPart.cfg"
 partDict = getPartDict(Kemu.getLines(testFile))
-print(partDict)
+test = list(partDict.values())
+for item in test:
+    print(type(item))
