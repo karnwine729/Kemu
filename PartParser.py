@@ -4,41 +4,42 @@ def parseLine(line):
     value = value.split("//")[0].strip()
     return key, value
 
-def getNodeName(lastPotentialNodeName, partDict):
-    nodeName = ""
-    if lastPotentialNodeName not in partDict:
-        return lastPotentialNodeName
-    nodeNameCount = len([nodeName for nodeName in partDict.keys() if nodeName.startswith(lastPotentialNodeName)])
-    return f"{lastPotentialNodeName}_{nodeNameCount}"
+def getKeyName(keyName, partDict):
+    if keyName not in partDict:
+        return keyName
+    keyCount = len([key for key in partDict.keys() if key.startswith(keyName)]) + 1
+    return f"{keyName}_{keyCount}"
 
 def getPartDictRecursively(lines):
     partDict = {}
     lastPotentialNodeName = ""
     for line in lines:
-        if line.startswith("//"):
+        if line.startswith("//") or line.strip() == "":
             continue
         elif "{" in line:
             node = getPartDictRecursively(lines)
-            nodeName = getNodeName(lastPotentialNodeName, partDict)
+            nodeName = getKeyName(lastPotentialNodeName, partDict)
             partDict[nodeName] = node
         elif "}" in line:
             break
         elif "=" in line:
             key, value = parseLine(line)
+            key = getKeyName(key, partDict)
             partDict[key] = value
         else:
             lastPotentialNodeName = line.strip()
     return partDict
 
-def getPartDict(lines):
+def getPartDictGenerator(lines):
     linesGenerator = (line for line in lines)
     return getPartDictRecursively(linesGenerator)
+
+def getPartDict(lines):
+    partDict = getPartDictGenerator(lines)
+    return partDict['PART']
 
 import Kemu
 
 testFile = "testPart.cfg"
 partDict = getPartDict(Kemu.getLines(testFile))
-for key, value in partDict.items():
-    for subKey, subValue in value.items():
-        print(f"{subKey}: {subValue}")
-
+print(partDict)
