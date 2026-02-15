@@ -30,12 +30,9 @@ def getPartDictRecursively(lines):
             lastPotentialNodeName = line.strip()
     return partDict
 
-def getPartDictGenerator(lines):
-    linesGenerator = (line for line in lines)
-    return getPartDictRecursively(linesGenerator)
-
 def getPartDict(lines):
-    partDict = getPartDictGenerator(lines)
+    linesGenerator = (line for line in lines)
+    partDict = getPartDictRecursively(linesGenerator)
     return partDict['PART']
 
 import Kemu
@@ -45,3 +42,25 @@ partDict = getPartDict(Kemu.getLines(testFile))
 test = list(partDict.values())
 for item in test:
     print(type(item))
+
+### SAMPLE TREE CODE ###
+# root = {'name': 'Alice', 'children': [{'name': 'Bob', 'children':
+# [{'name': 'Darya', 'children': []}]}, {'name': 'Caroline',
+# 'children': [{'name': 'Eve', 'children': [{'name': 'Gonzalo',
+# 'children': []}, {'name': 'Hadassah', 'children': []}]}, {'name': 'Fred', 'children': []}]}]}
+
+# def findEightLetterName(node):
+#     print(f" Visiting node {node['name']}...")
+
+#     print(f" Checking if {node['name']} has eight letters...")
+#     if len(node['name']) == 8:
+#         return node['name']
+    
+#     if len(node['children']) > 0:
+#         for child in node['children']:
+#             result = findEightLetterName(child)
+#             if result is not None:
+#                 return result
+#     return None
+
+# print(f"Found an eight-letter name: {findEightLetterName(root)}")
