@@ -4,37 +4,35 @@ def parseLine(line):
     value = value.split("//")[0].strip()
     return key, value
 
-def getKeyInNest(lastNonEmptyLine, partDict):
-    key = ""
-    if lastNonEmptyLine in partDict:
-        count = len([key for key in partDict.keys() if key.startswith(lastNonEmptyLine)])
-        key = f"{lastNonEmptyLine}_{count}"
-    else:
-        key = lastNonEmptyLine
-    return key
+def getNodeName(lastPotentialNodeName, partDict):
+    nodeName = ""
+    if lastPotentialNodeName not in partDict:
+        return lastPotentialNodeName
+    nodeNameCount = len([nodeName for nodeName in partDict.keys() if nodeName.startswith(lastPotentialNodeName)])
+    return f"{lastPotentialNodeName}_{nodeNameCount}"
 
 def getPartDictRecursively(lines):
     partDict = {}
-    lastNonEmptyLine = ""
+    lastPotentialNodeName = ""
     for line in lines:
-        if "{" in line:
-            nest = getPartDictRecursively(lines)
-            key = getKeyInNest(lastNonEmptyLine, partDict)
-            partDict[key] = nest
+        if line.startswith("//"):
+            continue
+        elif "{" in line:
+            node = getPartDictRecursively(lines)
+            nodeName = getNodeName(lastPotentialNodeName, partDict)
+            partDict[nodeName] = node
         elif "}" in line:
             break
-        elif line.startswith("//"):
-            continue
         elif "=" in line:
             key, value = parseLine(line)
             partDict[key] = value
         else:
-            lastNonEmptyLine = line
+            lastPotentialNodeName = line.strip()
     return partDict
 
 def getPartDict(lines):
-    generatedLines = (line for line in lines)
-    return getPartDictRecursively(generatedLines)
+    linesGenerator = (line for line in lines)
+    return getPartDictRecursively(linesGenerator)
 
 import Kemu
 
@@ -43,3 +41,4 @@ partDict = getPartDict(Kemu.getLines(testFile))
 for key, value in partDict.items():
     for subKey, subValue in value.items():
         print(f"{subKey}: {subValue}")
+
