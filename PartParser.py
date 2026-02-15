@@ -33,34 +33,26 @@ def getPartDictRecursively(lines):
 def getPartDict(lines):
     linesGenerator = (line for line in lines)
     partDict = getPartDictRecursively(linesGenerator)
-    return partDict['PART']
+    try:
+        return partDict["PART"]
+    except KeyError:
+        return partDict["\ufeffPART"]
 
 import Kemu
 
-testFile = "testPart.cfg"
+# testFile = "testPart.cfg"
+testFile = "/home/keith/kspTestingTmp/GameData/Squad/Parts/Engine/jetEngines/jetEngineTurbo.cfg"
 partDict = getPartDict(Kemu.getLines(testFile))
-test = list(partDict.values())
-for item in test:
-    print(type(item))
 
-### SAMPLE TREE CODE ###
-# root = {'name': 'Alice', 'children': [{'name': 'Bob', 'children':
-# [{'name': 'Darya', 'children': []}]}, {'name': 'Caroline',
-# 'children': [{'name': 'Eve', 'children': [{'name': 'Gonzalo',
-# 'children': []}, {'name': 'Hadassah', 'children': []}]}, {'name': 'Fred', 'children': []}]}]}
+def getValueFromKey(keyName, partDict):
+    for key, value in partDict.items():
+        if key == keyName:
+            return value
+        elif isinstance(value, dict):
+            result = getValueFromKey(keyName, value)
+            if result is not None:
+                return result
+    return None
 
-# def findEightLetterName(node):
-#     print(f" Visiting node {node['name']}...")
-
-#     print(f" Checking if {node['name']} has eight letters...")
-#     if len(node['name']) == 8:
-#         return node['name']
-    
-#     if len(node['children']) > 0:
-#         for child in node['children']:
-#             result = findEightLetterName(child)
-#             if result is not None:
-#                 return result
-#     return None
-
-# print(f"Found an eight-letter name: {findEightLetterName(root)}")
+value = getValueFromKey("velCurve", partDict)
+print(value)
